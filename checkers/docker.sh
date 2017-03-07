@@ -6,5 +6,13 @@
 # CHECK IF DOCKER IS INSTALLED
 # RETURN TYPE: BOOL
 
-docker -v &> /dev/null
-[[ $? -eq 0 ]] && echo "true" || echo "false"
+function check_docker {
+  docker -v &> /dev/null
+  if [ $? -eq 0 ]; then
+    echo true
+    exit 0
+  else
+    echo false
+    exit 1
+  fi
+}
