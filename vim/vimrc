@@ -115,6 +115,7 @@ colorscheme hybrid
 "
 "map <C-m> :!mypy % --disallow-untyped-defs<CR>
 map <leader>t :!pytest % <CR>
+map <leader>l :!!<CR>
 map <leader>p :!pylint % <CR>
 
 " move around splits
