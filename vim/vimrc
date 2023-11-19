@@ -1,0 +1,387 @@
+call pathogen#infect()
+call pathogen#helptags()
+
+
+set autowrite
+
+set backspace=indent,eol,start
+
+set number
+"autocmd InsertEnter * :set number
+"autocmd InsertLeave * :set relativenumber
+set tabstop=2
+set shiftwidth=2
+set expandtab
+set ruler
+set colorcolumn=80
+set cursorline
+
+filetype on
+filetype plugin indent on
+filetype plugin on 
+filetype indent on
+syntax enable
+
+autocmd FileType python set sw=4
+autocmd FileType python set ts=4
+autocmd FileType python set sts=4
+
+
+autocmd FileType go set sw=4
+autocmd FileType go set ts=4
+autocmd FileType go set sts=4
+
+set clipboard=unnamed
+set clipboard+=unnamedplus
+
+
+call plug#begin()
+"Plug 'neoclide/coc.nvim', {'do': { -> coc#util#install()}}
+"Plug 'josa42/coc-go'
+"Plug 'weirongxu/coc-explorer'
+"Plug 'drewtempelmeyer/palenight.vim'
+"Plug 'mhartington/oceanic-next'
+Plug 'vim-test/vim-test'
+Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+"Plug 'ghifarit53/tokyonight-vim'
+"
+
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'tpope/vim-dadbod'
+Plug 'github/copilot.vim'
+
+call plug#end()
+
+
+"Change snippets keybinding to <CTRL+J> instead of <TAB>
+let g:UltiSnipsExpandTrigger="<C-j>"
+
+"autocmd winenter * execute winnr() * 2 . 'wincmd >'
+
+"auto resize when doing TDD in a small screen
+"autocmd winenter * vertical resize 80
+
+" Flagging Unnecessary Whitespace
+" au BufRead,BufNewFile *.py,*.pyw,*.c,*.h, *.rb match BadWhitespace /\s\+$/
+
+"set statusline+=%#warningmsg#
+"set statusline+=%{SyntasticStatuslineFlag()}
+"set statusline+=%*
+
+"let g:syntastic_always_populate_loc_list = 1
+"let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 0
+let g:syntastic_check_on_wq = 0
+nmap <leader>c :SyntasticCheck<CR>
+
+
+let g:syntastic_mode_map = { 'mode': 'passive',
+                            \ 'passive_filetypes': ['python', 'javascript'] }
+
+
+" autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
+
+" ==========================================================================
+" keys that I should never use
+" ---------------------------------------------------------------------------
+inoremap <Left>  <NOP>
+inoremap <Right> <NOP>
+inoremap <Up>    <NOP>
+inoremap <Down>  <NOP>
+nnoremap <Left>  <NOP>
+nnoremap <Right> <NOP>
+nnoremap <Up>    <NOP>
+nnoremap <Down>  <NOP>
+
+" ==========================================================================
+" Version for regex used by vim. For some reasons the recent regex 
+" engine slow the vim performance for ruby
+" ---------------------------------------------------------------------------
+"set re=1 
+
+" ==========================================================================
+" SWAP
+" ---------------------------------------------------------------------------
+" vim put swap, backup and undo files in a special location instead 
+" of the working directory of the file being edited:
+" ---------------------------------------------------------------------------
+set undofile
+set backupdir=~/.vim/backup//
+set directory=~/.vim/swap//
+set undodir=~/.vim/undo//
+
+" ===========================================================================
+" COLORS
+" ---------------------------------------------------------------------------
+ "set cursorline
+set cursorcolumn
+set background=dark
+
+"set termguicolors
+"let g:tokyonight_style = 'night' " available: night, storm
+"let g:tokyonight_enable_italic = 1
+"colorscheme tokyonight
+
+"colorscheme solarized
+"colorscheme sourcerer"
+colorscheme hybrid
+"colorscheme base16-default-dark
+"colorscheme palenight
+"colorscheme monokai
+"colorscheme distinguished
+"colorscheme grb256
+"colorscheme distinguished
+"colorscheme railscasts
+"colorscheme python
+"colorscheme codeschool 
+"set guifont=Monaco:h12
+
+
+" ===========================================================================
+" BASIC KEY MAPS
+" ---------------------------------------------------------------------------
+"map <C-m> :!mypy % --disallow-untyped-defs<CR>
+"map <leader>t :!pytest % <CR>
+autocmd FileType python nmap <leader>t  :!pytest % <CR>
+"autocmd FileType go nmap <leader>t  :w<CR>:!go test %<CR>
+"map <leader>p :!pylint % <CR>
+"
+
+" move around splits
+map <c-j> <c-w>j
+map <c-k> <c-w>k
+map <c-l> <c-w>l
+map <c-h> <c-w>h
+
+"NerdTree
+map <C-n> :NERDTreeToggle<CR>
+let g:NERDTreeDirArrows=0
+
+"Ack Search"
+nmap <leader>f <Esc>:Ack!
+
+"JSON Formatter
+function! FormatJSON()
+  :%!python -m json.tool
+endfunction
+nnoremap <leader>j :call FormatJSON()<cr>
+
+
+" ==========================================================================
+" AIRLINE CONFIG
+" --------------------------------------------------------------------------
+let g:airline_theme='angr'
+let g:airline#extensions#tabline#fnamemod = ':t'
+let g:airline#extensions#tabline#fnamecollapse = 0
+
+" ==========================================================================
+" COC VIM
+" --------------------------------------------------------------------------
+"Having longer updatetime (default is 4000 ms = 4s) 
+"leads to noticeable delays and poor user experience
+set updatetime=300
+"
+"Always show the signcolumn, otherwise it would shift the 
+"text each time diagnostics appear/become resolved
+set signcolumn=yes
+
+" Use tab for trigger completion with characters ahead and navigate
+" NOTE: There's always complete item selected by default, you may want to enable
+" no select by `"suggest.noselect": true` in your configuration file
+" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
+" other plugin before putting this into your config
+"inoremap <silent><expr> <TAB>
+"      \ coc#pum#visible() ? coc#pum#next(1) :
+"      \ CheckBackspace() ? "\<Tab>" :
+"      \ coc#refresh()
+"inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
+
+" Make <CR> to accept selected completion item or notify coc.nvim to format
+" <C-g>u breaks current undo, please make your own choice
+inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
+                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+function! CheckBackspace() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+" Use <c-space> to trigger completion
+if has('nvim')
+  inoremap <silent><expr> <c-space> coc#refresh()
+else
+  inoremap <silent><expr> <c-@> coc#refresh()
+endif
+
+
+" Use <C-l> for trigger snippet expand.
+imap <C-l> <Plug>(coc-snippets-expand)
+
+" Use <C-j> for select text for visual placeholder of snippet.
+vmap <C-j> <Plug>(coc-snippets-select)
+
+" Use <C-j> for jump to next placeholder, it's default of coc.nvim
+let g:coc_snippet_next = '<c-j>'
+
+" Use <C-k> for jump to previous placeholder, it's default of coc.nvim
+let g:coc_snippet_prev = '<c-k>'
+
+
+inoremap <silent><expr> <c-space> coc#refresh()
+
+
+" ===========================================================================
+" RUBY
+" ---------------------------------------------------------------------------
+autocmd FileType ruby  map <buffer> <Leader>r :w<CR>:exec '!ruby' shellescape(@%, 1)<CR>
+" autocmd BufWritePost *.rb :RuboCop
+autocmd FileType ruby map <buffer> <leader>b :RuboCop<CR>
+
+" ===========================================================================
+" PYTHON
+" ---------------------------------------------------------------------------
+autocmd FileType python map <buffer> <Leader>r :w<CR>:exec '!python' shellescape(@%, 1)<CR>
+" autocmd FileType python map <buffer> <Leader>b :w<CR>:exec flake8#Flake8()<CR>
+" autocmd BufWritePost *.py call Flake8()
+" autocmd BufWritePost *.py call Mypy
+
+" ===========================================================================
+" GO 
+" ---------------------------------------------------------------------------
+autocmd FileType go setlocal noexpandtab tabstop=4 shiftwidth=4 softtabstop=4
+
+"Enable auto-complete automatically when pressing (dot)
+"au filetype go inoremap <buffer> . .<C-x><C-o>
+
+au FileType go nmap <leader>r <Plug>(go-run)
+au FileType go nmap <leader>b <Plug>(go-build)
+au FileType go nmap <leader>t <Plug>(go-test)
+au FileType go nmap <leader>c <Plug>(go-coverage-toggle)
+au FileType go nmap <Leader>d <Plug>(go-def-tab)
+au FileType go nmap <Leader>e <Plug>(go-rename)
+au FileType go nmap <Leader>i <Plug>(go-implements)
+au FileType go nmap <Leader>in <Plug>(go-info)
+au FileType go nmap <Leader>ds <Plug>(go-def-split)
+au FileType go nmap <Leader>dv <Plug>(go-def-vertical)
+au FileType go nmap <leader>a :GoAlternate<CR>
+au FileType go nmap <Leader>ae <Plug>(go-alternate-edit)
+au FileType go nmap <Leader>av <Plug>(go-alternate-vertical)
+
+" disable gd from vim-go
+let g:go_def_mapping_enabled = 0
+
+
+" GoTo code navigation
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+autocmd CursorHold * silent call CocActionAsync('highlight')
+
+
+"Go syntax highlighting
+let g:go_highlight_fields = 1
+let g:go_highlight_functions = 1
+let g:go_highlight_function_calls = 1
+let g:go_highlight_extra_types = 1
+let g:go_highlight_operators = 1
+
+"Auto formatting and importing
+let g:go_fmt_autosave = 1
+let g:go_fmt_command = "goimports"
+
+" Status line types/signatures
+let g:go_auto_type_info = 1
+
+  
+" ===========================================================================
+" OPEN THE RSPEC FILE OF A GIVEN RUBY FILE(CONTROLLER, MODEL, ETC)
+" ---------------------------------------------------------------------------
+autocmd FileType python nmap <leader>a :call OpenTestAlternate()<CR>
+autocmd FileType ruby nmap <leader>a :call OpenTestAlternate()<cr>
+
+function! OpenTestAlternate()
+  if &filetype=='python'
+    let new_file = AlternateForCurrentFilePython()
+    exec ':vsplit ' . new_file
+  endif
+
+  if &filetype=='ruby'
+    let new_file = AlternateForCurrentFile()
+    exec ':vsplit ' . new_file
+  endif
+endfunction
+
+" Close all other windows, open a vertical split, and open this file's test
+" alternate in it.
+" nnoremap <leader>s :call FocusOnFile()<cr>
+function! FocusOnFile()
+  tabnew %
+  normal! v
+  normal! l
+  call OpenTestAlternate()
+  normal! h
+endfunction
+
+function! AlternateForCurrentFilePython()
+  let current_file = expand("%")
+  let new_file = current_file
+  let in_tests = match(current_file, '^tests/') != -1
+  let going_to_tests = !in_tests
+  let in_app = match(current_file, '\<search\>') != -1 
+  if going_to_tests
+    if in_app
+      let new_file = substitute(new_file, '^app/', '', '')
+    end
+    let new_file = substitute(new_file, 'search/', '', '') "Remove search from the path. There is no 'search' inside test folder
+    let python_file = split(new_file, '([^/]+)$')
+    let new_file = substitute(new_file, '/*$', python_file[1], '')
+    let new_file = 'tests/unit/' . new_file
+  else
+    let new_file = substitute(new_file, '_spec\.rb$', '.rb', '')
+    let new_file = substitute(new_file, '^spec/', '', '')
+    if in_app
+      let new_file = 'app/' . new_file
+    end
+  endif
+  return new_file
+endfunction
+
+function! AlternateForCurrentFile()
+  let current_file = expand("%")
+  let new_file = current_file
+  let in_spec = match(current_file, '^spec/') != -1
+  let going_to_spec = !in_spec
+  let in_app = match(current_file, '\<controllers\>') != -1 || match(current_file, '\<models\>') != -1 || match(current_file, '\<views\>') != -1 || match(current_file, '\<helpers\>') != -1
+  if going_to_spec
+    if in_app
+      let new_file = substitute(new_file, '^app/', '', '')
+    end
+    let new_file = substitute(new_file, '\.e\?rb$', '_spec.rb', '')
+    let new_file = 'spec/' . new_file
+  else
+    let new_file = substitute(new_file, '_spec\.rb$', '.rb', '')
+    let new_file = substitute(new_file, '^spec/', '', '')
+    if in_app
+      let new_file = 'app/' . new_file
+    end
+  endif
+  return new_file
+endfunction
+
+" -------------------------------------------------------
+" Pytest
+" -------------------------------------------------------
+"autocmd FileType python nmap <silent><Leader>t <Esc>:Pytest file<CR>
+"autocmd FileType python nmap <silent><Leader>T <Esc>:Pytest class<CR>
+"autocmd FileType python nmap <silent><Leader>T <Esc>:Pytest method<CR>
+"autocmd FileType python nmap <silent><Leader>l <Esc>:Pytest last<CR>
+
+nmap <silent> <leader>X :TestFile<CR>
+
+
+set runtimepath^=~/.vim/bundle/ctrlp.vim
+let g:ctrlp_custom_ignore = 'tmp\|DS_Store\|git'
