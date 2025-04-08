@@ -1,0 +1,314 @@
+-- require("config.lazy")
+-- 
+-- 
+-- require("lazy").setup({
+-- 	{
+-- 		"rebelot/kanagawa.nvim", 
+--         	config = function()
+--             		vim.cmd("colorscheme kanagawa")
+--         	end
+--     	},
+-- 
+-- 	{
+--         	"nvim-lualine/lualine.nvim",
+--         	config = function()
+--             		require('lualine').setup()
+--         	end
+--     	},
+-- 	{
+-- 
+-- 	        "nvim-treesitter/nvim-treesitter",
+--         	build = ':TSUpdate',
+--         	config = function()
+--             		require('nvim-treesitter.configs').setup({
+--                 		ensure_installed = { 'go' }, -- Install Go parser
+--                 		highlight = {
+--                     			enable = true,           -- Enable Treesitter-based highlighting
+--                 		},
+--             		})
+--         	end,
+-- 	},
+-- 
+-- 
+-- 	{
+-- 		'L3MON4D3/LuaSnip',
+-- 		version = "v2.*", -- Replace <CurrentMajor> by the latest released major (first number of latest release)
+-- 		build = "make install_jsregexp",
+-- 		config = function()
+-- 		    require('luasnip.loaders.from_vscode').lazy_load() -- Load snippets
+-- 		end,
+-- 	},
+-- 
+-- 	{
+--         	'rafamadriz/friendly-snippets',
+--     	},
+-- 
+-- 
+--     	{
+--     		'nvim-telescope/telescope.nvim', tag = '0.1.8',
+-- 		dependencies = { 'nvim-lua/plenary.nvim' }
+--     	},
+-- 
+-- 
+-- 	{
+--         	"neovim/nvim-lspconfig",
+--         	config = function()
+--             		require("lspconfig").pyright.setup({})
+-- 			require("lspconfig").gopls.setup({
+-- 				capabilities = require('cmp_nvim_lsp').default_capabilities(),
+-- 				filetypes = { "go", "gomod" },
+-- 				root_dir = require'lspconfig'.util.root_pattern("go.mod", ".git"),
+-- 				settings = {
+-- 					gopls = {
+-- 						analyses = {
+-- 							unusedparams = true, -- Enable unused parameter analysis
+-- 							shadow = true,       -- Enable shadow variable detection
+-- 				      		},
+-- 				      		staticcheck = true,      -- Enable static analysis
+-- 				    	},
+-- 				},
+-- 			})
+-- 			require("lspconfig").terraformls.setup({})
+--         	end
+--     	},
+-- 
+-- 
+-- 	{
+--         	"hrsh7th/nvim-cmp",
+--         	dependencies = {
+--             		"hrsh7th/cmp-nvim-lsp", -- LSP completions
+--         	},
+--         	config = function()
+--             		local cmp = require("cmp")
+--             		cmp.setup({
+--                 		sources = {
+--                     			{ name = "nvim_lsp" }
+--                 		}
+--             		})
+--         	end
+--     	},
+-- 
+-- 	{
+-- 		"hashivim/vim-terraform",
+-- 		config = function()
+--     			vim.g.terraform_fmt_on_save = 1
+--     			vim.g.terraform_align = 1
+-- 		end
+-- 	},
+-- 
+-- 
+-- 	{
+--     		"preservim/nerdtree"
+-- 	},
+-- 
+-- 	{
+-- 		"tpope/vim-dispatch"
+-- 	},
+-- 
+-- 	{
+-- 		"fatih/vim-go"
+-- 	},
+-- 
+-- 
+-- 	{
+-- 		"vim-test/vim-test"
+-- 	},
+-- 
+-- 	{
+--     		"nvim-neo-tree/neo-tree.nvim", branch = "v3.x",
+--     		dependencies = {
+--       			"nvim-lua/plenary.nvim",
+--       			"nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
+--       			"MunifTanjim/nui.nvim",
+--       			"3rd/image.nvim", -- Optional image support in preview window: See `# Preview Mode` for more information
+--     		}
+-- 	},
+-- 
+-- 	{
+-- 		'ray-x/go.nvim',                       -- Go plugin with refactoring support
+-- 		dependencies = { 'ray-x/guihua.lua' },
+-- 		config = function()
+-- 			require('go').setup({
+-- 				gofmt = 'gopls',
+-- 				goimport = 'goimports',
+-- 				--max_line_len = 120,
+-- 				linter = 'golangci-lint',      -- Optional for linting
+-- 			})
+-- 		end
+-- 	},
+-- 
+-- })
+-- 
+-- 
+-- 
+-- ----------------------------------------------------------------
+-- -- CONFIGS
+-- ----------------------------------------------------------------
+-- 
+-- -- Enable line numbers
+-- vim.opt.number = true
+-- vim.g.mapleader = "\\"
+-- 
+-- -- Show a vertical line
+-- vim.opt.colorcolumn = "80"  
+-- 
+-- 
+-- function ReloadConfig()
+--     vim.cmd("source ~/.config/nvim/init.lua")
+--     print("Configuration reloaded!")
+-- end
+-- 
+-- -- Map <leader>r to reload the configuration
+-- --vim.keymap.set('n', '<leader>r', function()
+-- --    vim.cmd('source ~/.config/nvim/init.lua')
+-- --    print("Configuration reloaded!")
+-- --end)
+-- --
+-- 
+-- require('luasnip').config.set_config({
+--     history = true, -- Enable snippet history
+--     updateevents = "TextChanged,TextChangedI",
+-- })
+-- 
+-- require('luasnip.loaders.from_vscode').lazy_load()
+-- 
+-- local ls = require('luasnip')
+-- local s = ls.snippet
+-- local t = ls.text_node
+-- local i = ls.insert_node
+-- 
+-- -- Add the custom snippet
+-- ls.add_snippets('go', {
+--     s('tst', {
+--         t('func Test'),
+-- 	i(1, 'TestName'),
+--     }),
+-- })
+-- 
+-- local sn = ls.snippet_node
+-- local isn = ls.indent_snippet_node
+-- local t = ls.text_node
+-- local i = ls.insert_node
+-- local f = ls.function_node
+-- local c = ls.choice_node
+-- local d = ls.dynamic_node
+-- local r = ls.restore_node
+-- local events = require("luasnip.util.events")
+-- local ai = require("luasnip.nodes.absolute_indexer")
+-- local extras = require("luasnip.extras")
+-- local l = extras.lambda
+-- local rep = extras.rep
+-- local p = extras.partial
+-- local m = extras.match
+-- local n = extras.nonempty
+-- local dl = extras.dynamic_lambda
+-- local fmt = require("luasnip.extras.fmt").fmt
+-- local fmta = require("luasnip.extras.fmt").fmta
+-- local conds = require("luasnip.extras.expand_conditions")
+-- local postfix = require("luasnip.extras.postfix").postfix
+-- local types = require("luasnip.util.types")
+-- local parse = require("luasnip.util.parser").parse_snippet
+-- local ms = ls.multi_snippet
+-- local k = require("luasnip.nodes.key_indexer").new_key
+-- 
+-- ls.add_snippets('go', {
+-- 	s("isn", {
+-- 		isn(1, {
+-- 			t({"This is indented as deep as the trigger",
+-- 			"and this is at the beginning of the next line"})
+-- 		}, "")
+-- 	})
+-- })
+-- 
+-- 
+-- 
+-- 
+-- local ls = require('luasnip')
+-- local s = ls.snippet
+-- local t = ls.text_node
+-- local i = ls.insert_node
+-- 
+-- 
+-- require('luasnip.loaders.from_lua').load({ paths = "~/.config/nvim/lua/snippets/" })
+-- 
+-- vim.api.nvim_set_keymap('i', '<Tab>', 'luasnip#expand_or_jumpable() ? "<Plug>luasnip-expand-or-jump" : "<Tab>"', { expr = true, silent = true })
+-- vim.api.nvim_set_keymap('s', '<Tab>', '<Plug>luasnip-jump-next', {})
+-- vim.api.nvim_set_keymap('s', '<S-Tab>', '<Plug>luasnip-jump-prev', {})
+-- 
+-- 
+-- ---------------------------------------------------------------
+-- --- Telescope
+-- ---------------------------------------------------------------
+-- local builtin = require('telescope.builtin')
+-- vim.keymap.set('n', '<C-p>', builtin.find_files, { desc = 'Telescope find files' })
+-- --vim.keymap.set('n', '<leader>ff', builtin.find_files, { desc = 'Telescope find files' })
+-- vim.keymap.set('n', '<leader>f', builtin.live_grep, { desc = 'Telescope live grep' })
+-- vim.keymap.set('n', '<leader>fb', builtin.buffers, { desc = 'Telescope buffers' })
+-- vim.keymap.set('n', '<leader>fh', builtin.help_tags, { desc = 'Telescope help tags' })
+-- 
+-- 
+-- ---------------------------------------------------------------
+-- --- tests
+-- ---------------------------------------------------------------
+-- -- vim.keymap.set('n', '<leader>t', ':Dispatch poetry run pytest<CR>', { noremap = true, silent = true, desc = 'Run pytest asynchronously' })
+-- 
+-- vim.api.nvim_set_keymap("n", "<leader>t", ":TestNearest<CR>", { noremap = true, silent = true })
+-- vim.api.nvim_set_keymap("n", "<leader>T", ":TestFile<CR>", { noremap = true, silent = true })
+-- vim.api.nvim_set_keymap("n", "<leader>ts", ":TestSuite<CR>", { noremap = true, silent = true })
+-- vim.api.nvim_set_keymap("n", "<leader>l", ":TestLast<CR>", { noremap = true, silent = true })
+-- vim.api.nvim_set_keymap("n", "<leader>tv", ":TestVisit<CR>", { noremap = true, silent = true })
+-- 
+-- 
+-- ---------------------------------------------------------------
+-- --- Nerdtree
+-- ---------------------------------------------------------------
+-- vim.keymap.set('n', '<C-n>', ':NERDTreeToggle<CR>', { noremap = true, silent = true })
+-- 
+-- 
+-- 
+-- ---------------------------------------------------------------
+-- --- Others
+-- ---------------------------------------------------------------
+-- --vim.keymap.set('n', 'gd', "<cmd>tab split | lua vim.lsp.buf.definition()<CR>", opts)
+-- --vim.keymap.set("n", "gi", "<cmd>lua vim.lsp.buf.references()<CR>", { noremap = true, silent = true })
+-- 
+-- 
+-- -- Go to definition using vim-go
+-- vim.api.nvim_create_autocmd("FileType", {
+--   pattern = "go",
+--   callback = function()
+--     vim.api.nvim_buf_set_keymap(0, "n", "gd", ":tab split | :GoDef<CR>", { noremap = true, silent = true })
+--     vim.api.nvim_buf_set_keymap(0, "n", "gi", ":tab split | :GoImplements<CR>", { noremap = true, silent = true })
+--   end,
+-- })
+-- 
+-- vim.keymap.set('n', '<leader>u', vim.lsp.buf.references, {desc = 'Find Usage'})
+-- --vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, {desc = 'Rename Symbol'})
+-- vim.api.nvim_set_keymap('n', '<Leader>r', '<Cmd>lua vim.lsp.buf.rename()<CR>', { noremap = true, silent = true })
+-- vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, {desc = 'Code Action'})
+-- 
+-- 
+-- local cmp = require('cmp')
+-- cmp.setup({
+--     mapping = cmp.mapping.preset.insert({
+--         ['<C-Space>'] = cmp.mapping.complete(),
+--         ['<CR>'] = cmp.mapping.confirm({ select = true }),
+--     }),
+--     sources = {
+--         { name = 'nvim_lsp' }
+--     }
+-- })
+-- 
+-- local lspconfig = require('lspconfig')
+-- lspconfig.pyright.setup{
+--     on_attach = function(client, bufnr)
+--         -- Automatically detect Poetry virtualenv path
+--         local poetry_venv = vim.fn.system('poetry env info --path'):gsub("\n", "")
+--         if vim.fn.isdirectory(poetry_venv) == 1 then
+--             client.config.settings.python.pythonPath = poetry_venv .. '/bin/python'
+--         else
+--             client.config.settings.python.pythonPath = '/usr/bin/python'  -- fallback to system Python
+--         end
+--         client.notify("workspace/didChangeConfiguration", { settings = client.config.settings })
+--     end
+-- }
