@@ -89,5 +89,35 @@ end
 -- vim.keymap.set("n", "<leader>l", rerun_last_test, { noremap = true, silent = true})
 
 
+-- Faster CursorHold so floats feel responsive
+vim.o.updatetime = 500  -- tweak to taste
+
+-- Nice diagnostic float defaults
+vim.diagnostic.config({
+  update_in_insert = false,
+  severity_sort = true,
+  float = { border = "rounded", source = "if_many", focusable = false },
+})
+
+-- On idle, show a diagnostic float for WARN/ERROR on the current line
+vim.api.nvim_create_autocmd("CursorHold", {
+  callback = function()
+    local bufnr = 0
+    local lnum = vim.api.nvim_win_get_cursor(0)[1] - 1
+    local diags = vim.diagnostic.get(bufnr, {
+      lnum = lnum,
+      severity = { min = vim.diagnostic.severity.WARN }, -- only Warn/Error
+    })
+    if #diags == 0 then return end
+    vim.diagnostic.open_float(bufnr, {
+      scope = "line",
+      focus = false,
+      close_events = { "CursorMoved", "BufHidden", "InsertCharPre" },
+    })
+  end,
+})
+
+
+
 require("config.lazy")
 require("config.alternate")
