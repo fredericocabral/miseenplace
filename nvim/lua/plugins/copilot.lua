@@ -3,6 +3,7 @@ return {
     config = function()
         -- Enable Copilot for all file types
         vim.g.copilot_enabled = 1
+        -- vim.g.copilot_enabled = 0
 
         -- Keybindings
         vim.keymap.set("i", "<C-j>", "copilot#Accept('<CR>')", { expr = true, silent = true })

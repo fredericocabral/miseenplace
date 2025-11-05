@@ -4,6 +4,10 @@ return {
         -- Keybinding to toggle NERDTree
         vim.keymap.set("n", "<C-n>", ":NERDTreeToggle<CR>", { noremap = true, silent = true })
 
+        -- Ignore folders and files
+        vim.g.NERDTreeIgnore = { "__pycache__", "\\.pyc$", "\\.pyo$", "\\.pytest_cache" }
+
+
         -- Open file in a new tab when pressing enter
         vim.cmd([[
         autocmd FileType nerdtree map <buffer> <CR> t
