@@ -31,15 +31,15 @@ else
 fi
 
 
-if command -v tmux >/dev/null 2>&1; then
-  echo "${GREEN}TMUX is installed${NC}"
+if command -v pyenv >/dev/null 2>&1; then
+  echo "${GREEN}PYENV is installed${NC}"
 else
-  echo "${RED}TMUX is not installed${NC}"
-  read -p "Do you want to install TMUX? (y/n): " choice
+  echo "${RED}PYENV is not installed${NC}"
+  read -p "Do you want to install PYENV? (y/n): " choice
   case "$choice" in
     y|Y )
-      echo "Installing TMUX"
-      brew install tmux
+      echo "Installing PYENV"
+      brew install pyenv
       ;;
     * )
       echo "Skipping installation."
