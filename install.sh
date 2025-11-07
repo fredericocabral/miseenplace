@@ -47,6 +47,22 @@ else
    esac
 fi
 
+if command -v goenv >/dev/null 2>&1; then
+  echo "${GREEN}GOENV is installed${NC}"
+else
+  echo "${RED}GOENV is not installed${NC}"
+  read -p "Do you want to install GOENV? (y/n): " choice
+  case "$choice" in
+    y|Y )
+      echo "Installing GOENV"
+      brew install GOENV
+      ;;
+    * )
+      echo "Skipping installation."
+      ;;
+   esac
+fi
+
 ## mv ~/.zshrc ~/.zshrc.old
 ln -s "$(pwd)/zsh/zshrc" ~/.zshrc
 ln -s "$(pwd)/tmux/tmux.conf" ~/.tmux.conf
