@@ -2,23 +2,19 @@ return {
     "neovim/nvim-lspconfig",
     dependencies = { "hrsh7th/cmp-nvim-lsp" }, -- Ensure cmp-nvim-lsp loads
     config = function()
-        local lspconfig = require("lspconfig")
         local cmp_nvim_lsp = require("cmp_nvim_lsp")
 
         -- Ensure LSP completion capabilities are fully enabled
         local capabilities = vim.lsp.protocol.make_client_capabilities()
         capabilities = cmp_nvim_lsp.default_capabilities(capabilities)
 
-        -- Setup gopls with proper capabilities
-        lspconfig.gopls.setup({
+        -- gopls
+        vim.lsp.config("gopls", {
             capabilities = capabilities,
-            cmd = { "gopls" },
-            filetypes = { "go", "gomod", "gowork", "gotmpl"},
-            root_dir = lspconfig.util.root_pattern("go.work", "go.mod", ".git"),
             settings = {
                 gopls = {
-                    analyses = { 
-                        unusedparams = true ,
+                    analyses = {
+                        unusedparams = true,
                         fieldaligment = true,
                     },
                     completeUnimported = true, -- Suggest missing imports
@@ -27,7 +23,7 @@ return {
                     staticcheck = true,
                     directoryFilters = { "-vendor" },
                     importShortcut = "both",
-                    -- allowModfileModifications = true, -- ✅ Allow gopls to modify `go.mod`
+                    -- allowModfileModifications = true, -- Allow gopls to modify `go.mod`
                     hints = {
                         assignVariableTypes = true,
                         compositeLiteralFields = true,
@@ -38,15 +34,15 @@ return {
                     },
                 },
             },
-        }) -- Make sure this closing bracket is here!
+        })
+        vim.lsp.enable("gopls")
 
         -- Python LSP
         -- Requirements:
         -- pip install pyright
         -- pip install black ruff
-        lspconfig.pyright.setup({
+        vim.lsp.config("pyright", {
             capabilities = capabilities,
-            filetypes = { "python" },
             settings = {
                 python = {
                     analysis = {
@@ -58,42 +54,35 @@ return {
                 },
             },
         })
+        vim.lsp.enable("pyright")
 
-        lspconfig.ruff.setup({
+        vim.lsp.config("ruff", {
             capabilities = capabilities,
-            filetypes = { "python" },
         })
+        vim.lsp.enable("ruff")
 
-        lspconfig.terraformls.setup({
+        vim.lsp.config("terraformls", {
             capabilities = capabilities,
-            cmd = { "terraform-ls", "serve" },
-            filetypes = { "terraform", "tf", "tfvars" },
-            root_dir = lspconfig.util.root_pattern(".terraform", ".git", "*.tf"),
         })
+        vim.lsp.enable("terraformls")
 
-                                                                              
         -- LSP Keymaps
-        --vim.api.nvim_set_keymap("n", "gd", "<cmd>lua vim.lsp.buf.definition()<CR>", { noremap = true, silent = true })
         vim.keymap.set("n", "gd", function()
             vim.cmd("tab split") -- Open a new tab
             vim.lsp.buf.definition() -- Jump to definition
         end, { noremap = true, silent = true, desc = "Go to Definition in new tab" })
 
-        vim.api.nvim_set_keymap("n", 'gi', "<cmd>lua vim.lsp.buf.implementation()<CR>", { noremap = true, silent = true, desc = 'Go to implementation'})
+        vim.api.nvim_set_keymap("n", "gi", "<cmd>lua vim.lsp.buf.implementation()<CR>", { noremap = true, silent = true, desc = "Go to implementation" })
         vim.api.nvim_set_keymap("n", "gu", "<cmd>lua vim.lsp.buf.references()<CR>", { noremap = true, silent = true })
-        --vim.api.nvim_set_keymap("n", "K", "<cmd>lua vim.lsp.buf.hover()<CR>", { noremap = true, silent = true })
         vim.api.nvim_set_keymap("n", "<leader>rn", "<cmd>lua vim.lsp.buf.rename()<CR>", { noremap = true, silent = true })
         vim.api.nvim_set_keymap("n", "<leader>ca", "<cmd>lua vim.lsp.buf.code_action()<CR>", { noremap = true, silent = true })
 
-
         -- Ensure K shows docs from the active LSP
         vim.api.nvim_create_autocmd("LspAttach", {
-          callback = function(ev)
-            local opts = { buffer = ev.buf, noremap = true, silent = true, desc = "LSP Hover" }
-            vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
-          end,
+            callback = function(ev)
+                local opts = { buffer = ev.buf, noremap = true, silent = true, desc = "LSP Hover" }
+                vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
+            end,
         })
     end,
 }
-
-

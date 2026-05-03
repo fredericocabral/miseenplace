@@ -105,11 +105,16 @@ source $ZSH/oh-my-zsh.sh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 
+
 export WORKON_HOME=$HOME/.virtualenvs
 export PROJECT_HOME=$HOME/workspace
-eval "$(pyenv init -)"
 #pyenv virtualenvwrapper_lazy
 #source /usr/local/bin/virtualenvwrapper.sh
+
+
+export PYENV_ROOT="$HOME/.pyenv"
+[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
 
 
 # GIT ALIAS
@@ -149,11 +154,12 @@ export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
 #GO
 export GOPATH=$HOME/workspace
 export PATH=$PATH:$GOPATH/bin
-export GOROOT="$(brew --prefix golang)/libexec"
+#export GOROOT="$(brew --prefix golang)/libexec"
 
 #GOENV
 export GOENV_ROOT="$HOME/.goenv"
 export PATH="$GOENV_ROOT/bin:$PATH"
+eval "$(goenv init -)"
 
 
 
@@ -183,3 +189,6 @@ export PATH=$(pyenv root)/shims:$PATH
 eval "$(goenv init -)"
 
 source ~/.variables.env
+
+# opencode
+export PATH=/home/fred/.opencode/bin:$PATH
