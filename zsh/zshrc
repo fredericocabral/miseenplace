@@ -192,3 +192,8 @@ source ~/.variables.env
 
 # opencode
 export PATH=/home/fred/.opencode/bin:$PATH
+
+
+alias "kimi"="opencode -m moonshotai/kimi-k2.6"
+alias "gpt"="opencode -m openai/gpt-5-5"
+
